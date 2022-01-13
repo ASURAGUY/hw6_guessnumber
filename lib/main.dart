@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +28,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   final _controller = TextEditingController();
+  bool _validate = false;
   var game = Game();
 
   @override
@@ -53,24 +56,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /*Row(
-                children: [
-                  Container(width: 50.0, height: 50.0, color: Colors.blue),
-                  Expanded(
-                    child: Container(
-                      width: 30.0,
-                      height: 50.0,
-                      //color: Colors.pink,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Text('FLUTTER', textAlign: TextAlign.end,),
-                      ),
-                      alignment: Alignment.centerRight,
-                    ),
-                  ),
-                  //SizedBox(width: 10.0),
-                ],
-              ),*/
+
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -108,6 +94,8 @@ class HomePage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.7),
                     border: OutlineInputBorder(),
                     hintText: 'ทายเลขตั้งแต่ 1 ถึง 100',
+
+
                   ),
                 ),
               ),
@@ -117,18 +105,18 @@ class HomePage extends StatelessWidget {
                 child: ElevatedButton(
                   child: Text('GUESS'),
                   onPressed: () {
-                    var input = _controller.text;
-                    var guess = int.parse(input);
-                    var result = game.doGuess(guess);
 
-                    if (result == 1) {
+                    var input = _controller.text;
+                    var guess = int.tryParse(input!);
+
+                    if (guess == null) {
                       showDialog(
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                                title: Text('RESULT'),
-                                content: Text('$input มากเกินไป กรุณาลองใหม่'),
+                                title: Text('ERROR'),
+                                content: Text('กรอกข้อมูลไม่ถูกต้อง ให้กรอกเฉพาะตัวเลขเท่านั้น'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -139,44 +127,24 @@ class HomePage extends StatelessWidget {
                                 ]);
                           }
                       );
-                    } else if (result == -1) {
+                   }else {
+
+                      var result = game.doGuess(guess);
                       showDialog(
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('RESULT'),
-                              content: Text('$input น้อยเกินไป กรุณาลองใหม่'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                )
-                              ],
-                            );
-                          }
-                      );
-                    } else if (result == 0) {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('RESULT'),
-                              content: Text(
-                                  '$input ถูกต้อง!! \nคุณทายทั้งหมด ${game
-                                      .guessCount} ครั้ง'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                )
-                              ],
-                            );
+                                title: Text('${game.titleText}'),
+                                content: Text('$input ${game.Text}'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  )
+                                ]);
                           }
                       );
                     }
@@ -190,3 +158,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
