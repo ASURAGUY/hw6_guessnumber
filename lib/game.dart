@@ -31,7 +31,6 @@ class Game {
 
   void doGuess(int num) {
 
-
     _guessCount++;
     if (num > _answer!) {
       _titleText = 'RESULT';

@@ -128,7 +128,6 @@ class HomePage extends StatelessWidget {
                           }
                       );
                    }else {
-
                       var result = game.doGuess(guess);
                       showDialog(
                           context: context,
